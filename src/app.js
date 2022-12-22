@@ -10,6 +10,7 @@ const userRouter = require('./users/users.router')
 const authRouter = require('./auth/auth.router')
 const postRouter = require('./posts/posts.router')
 const followRouter = require('./follows/follows.router')
+const {swaggerDocs: V1SwaggerDocs } = require ('./utils/swagger')
 
 //? Initial Configs
 
@@ -50,4 +51,5 @@ app.use('/api/v1/posts', postRouter)
 
 app.listen(config.api.port, () => {
     console.log(`Server started on ${config.api.host}${config.api.port}`)
+    V1SwaggerDocs(app,config.api.port)
 })

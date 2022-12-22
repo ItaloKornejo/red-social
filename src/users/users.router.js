@@ -8,6 +8,23 @@ const roleMiddleware= require('../middlewares/role.middleware')
 
 router.route('/')
     .get(userServices.getAllUsers)
+
+    // /**
+    //  * Get track
+    //  * @openapi
+    //  * /users:
+    //  *  post:
+    //  *      tags:
+    //  *          -user
+    //  *      summary: "Get Users"
+    //  *      description: get track
+    //  *      requestBody:
+    //  *          content:
+    //  *              application/json:
+    //  *                  schema:
+    //  *                      $ref: '#/components/schemas/user'
+    //  * 
+    // */
     .post(userServices.postUser)
 
 router.route('/me')
