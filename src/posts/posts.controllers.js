@@ -44,10 +44,11 @@ const updatePost = async(id, userId, obj) => {
     return data[0]
 }
 
-const removePost = async (id) => {
+const removePost = async (id,userId) => {
     const data = await Posts.update({status:'disabled'},{
         where: {
             id: id,
+            userId:userId,
             status:'enable'
         }
     })

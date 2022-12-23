@@ -727,7 +727,7 @@ const options = {
                             description: "Invalid ID supplied"
                         },
                         400: {
-                            description: "Invalid ID supplied"
+                            description: "Post not available"
                         }
                     },
                     security: [
@@ -757,7 +757,7 @@ const options = {
                     ],
                     responses: {
                         204: {
-                            description: "",
+                            description: "Invalid Id",
                         },
                         400: {
                             description: "Error",
@@ -828,42 +828,31 @@ const options = {
                     summary: "Add like to a post",
                     description: "Add like to a post the social network",
                     operationId: "postNewLike",
-                    requestBody: {
-                        description: "Add like of a logged in user to a post",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "object",
-                                    properties: {
-                                        id: {
-                                            type: 'string', example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                                        },
-                                        userId: {
-                                            type: 'string', example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                                        },
-                                        postId: {
-                                            type: 'string', example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                                        }
-
-                                    }
-                                }
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            description: "ID of Post",
+                            required: true,
+                            schema: {
+                                type: "string",
+                                format: "uuid"
                             }
-                        },
-                        required: true
-                    },
+                        }
+                    ],
                     responses: {
                         201: {
                             description: "Successful operation",
                             content: {
                                 "application/json": {
                                     schema: {
-                                        "$ref": "#/components/schemas/user"
+                                        "$ref": "#/components/schemas/follow"
                                     }
                                 }
                             }
                         },
                         400: {
-                            description: "Invalid ID supplied"
+                            description: "You already liked this post"
                         }
                     },
                     security: [
@@ -1101,7 +1090,7 @@ const options = {
                 }
             },
             "/api/v1/auth/verify-user/{id}": {
-                patch: {
+                get: {
                     tags: [
                         "Auth"
                     ],
@@ -1132,7 +1121,7 @@ const options = {
             }
         }
     },
-    apis: ["src/users/users.router.js"]
+    apis: ["src/users/users.router.js","src/follows/follows.router.js","src/posts/posts.router.js","src/auth/auth.router.js"]
 }
 
 const swaggerSpec = swaggerJSDoc(options)

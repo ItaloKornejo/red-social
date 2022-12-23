@@ -18,7 +18,7 @@ const findAllUsers = async () => {
 const findUserById = async (id) => {
     const data = await Users.findOne({
         attributes: {
-            exclude: ['password', 'createdAt', 'updatedAt']
+            exclude: ['profileImg','password', 'createdAt', 'updatedAt']
         },
         where: {
             id: id
