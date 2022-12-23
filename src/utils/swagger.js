@@ -1099,6 +1099,36 @@ const options = {
                         }
                     }
                 }
+            },
+            "/api/v1/auth/verify-user/{id}": {
+                patch: {
+                    tags: [
+                        "Auth"
+                    ],
+                    summary: "Verify account",
+                    description: "Verify a registered account",
+                    operationId: "verifyUser",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            description: "ID of User",
+                            required: true,
+                            schema: {
+                                type: "string",
+                                format: "uuid"
+                            }
+                        }
+                    ],
+                    responses: {
+                        200: {
+                            description: "Verify user succesfully!",
+                        },
+                        400: {
+                            description: "Already verified user"
+                        }
+                    }
+                }
             }
         }
     },

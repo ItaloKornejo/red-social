@@ -50,6 +50,7 @@ app.use('/api/v1/posts', postRouter)
 
 
 app.listen(config.api.port, () => {
-    console.log(`Server started on ${config.api.host}${config.api.port}`)
+    // console.log(`Server started on ${config.api.host}${config.api.port}`)
+    console.log(`Server started on ${config.api.host}}`)
     V1SwaggerDocs(app,config.api.port)
 })

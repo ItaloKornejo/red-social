@@ -47,7 +47,7 @@ const postUser = (req, res) => {
                 from: config.api.emailSend,
                 to: data.email,
                 subject: `Verify account ${data.firstName} From Harmonyk`,
-                html: `<h1>Enter the following link to verify your account ${data.firstName}</h1> `,
+                html: `<h1>Enter the following link to verify your account: ${config.api.host}/api/v1/auth/verify-user/${data.dataValues.id}</h1> `,
                 text: 'Thanks you',
                 
             })

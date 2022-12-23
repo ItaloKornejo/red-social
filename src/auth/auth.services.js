@@ -80,8 +80,24 @@ const patchPassword = (req, res) => {
         })
 }
 
+const verifyUser = (req, res) => {
+    const id = req.params.id 
+    authControllers.userCheck(id)
+        .then(data => {
+            if(data){
+                res.status(200).json({message: 'Verify user succesfully!'})
+            } else {
+                res.status(400).json({message: 'Already verified user'})
+            }
+        })
+        .catch(err => {
+            res.status(400).json({message: err.message})
+        })
+}
+
 module.exports = {
     postLogin,
     postRecoveryToken,
-    patchPassword
+    patchPassword,
+    verifyUser
 }
