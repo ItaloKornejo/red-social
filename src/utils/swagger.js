@@ -1,5 +1,6 @@
 const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
+const config = require('../config')
 
 const options = {
     definition: {
@@ -9,7 +10,7 @@ const options = {
             description: "Servidor de una red social",
             version: "1.0.0"
         },
-        servers: [{ url: "http://localhost:9005/" }],
+        servers: [{ url: config.api.host }],
         tags: [{
             name: "User",
             description: "Operations about user"
