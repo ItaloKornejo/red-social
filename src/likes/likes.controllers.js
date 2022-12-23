@@ -30,7 +30,8 @@ const createLike = async (obj) => {
                 id: validate.id
             }
         })
-        return value
+        const {id,userId,postId} = value
+        return {id,userId,postId}
     }
     
     const data = await Likes.create({

@@ -3,14 +3,18 @@ const uuid = require('uuid')
 const Posts = require('../models/posts.models')
 
 const findAllPosts = async () => {
-    const data = await Posts.findAll({ where: {
+    const data = await Posts.findAll({ attributes: {
+        exclude: ['createdAt', 'updatedAt','status']
+    }, where: {
         status:'enable'
     }})
     return data
 }
 
 const findPostById = async (id) => {
-    const data = await Posts.findOne({
+    const data = await Posts.findOne({attributes: {
+        exclude: ['createdAt', 'updatedAt','status']
+    },
         where: {
             id: id,
             status:'enable'
@@ -25,7 +29,8 @@ const createPost = async (obj) => {
         userId: obj.userId,
         content: obj.content
     })
-    return data
+    const {id,userId,content} = data
+    return {id,userId,content}
 }
 
 const updatePost = async(id, userId, obj) => {

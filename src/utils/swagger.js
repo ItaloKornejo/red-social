@@ -19,6 +19,9 @@ const options = {
         }, {
             name: "Follow",
             description: "Operations about Follow"
+        }, {
+            name: "Auth",
+            description: "Operations about Authentication"
         }],
         components: {
             securitySchemes: {
@@ -65,6 +68,43 @@ const options = {
                             format: "date",
                             example: "1945-12-12"
                         },
+                    }
+                },
+                post: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: "uuid",
+                            example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                        },
+                        userId: {
+                            type: 'string',
+                            format: "uuid",
+                            example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                        },
+                        content: {
+                            type: "string",
+                            example: "new post"
+                        }
+                    }
+                },
+                follow: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: "uuid",
+                            example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                        },
+                        firstName: {
+                            type: 'string',
+                            example: "NameONE"
+                        },
+                        lastName: {
+                            type: "string",
+                            example: "LastNameTWO"
+                        }
                     }
                 }
             }
@@ -287,7 +327,7 @@ const options = {
                     ]
                 }
             },
-            "/api/v1/users/{id}'": {
+            "/api/v1/users/{id}": {
                 get: {
                     tags: [
                         "User"
@@ -468,7 +508,7 @@ const options = {
                 }
 
             },
-            "/api/v1/users/{id}/follow'": {
+            "/api/v1/users/{id}/follow": {
                 post: {
                     tags: [
                         "User"
@@ -498,13 +538,13 @@ const options = {
                                         items: {
                                             properties: {
                                                 id: {
-                                                    type: 'string',format: "uuid", example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                                                    type: 'string', format: "uuid", example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                                                 },
                                                 userId: {
-                                                    type: 'string',format: "uuid", example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                                                    type: 'string', format: "uuid", example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                                                 },
                                                 userId2: {
-                                                    type: 'string',format: "uuid", example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                                                    type: 'string', format: "uuid", example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                                                 },
                                                 updatedAt: {
                                                     type: 'string', format: "date", example: "YYYY-MM-DD"
@@ -531,6 +571,534 @@ const options = {
                         }
                     ]
                 }
+            },
+            "/api/v1/posts/": {
+                get: {
+                    tags: [
+                        "Post"
+                    ],
+                    summary: "Get all Posts",
+                    description: "Search all posts of the social network",
+                    operationId: "getAllPosts",
+                    responses: {
+                        200: {
+                            description: "Successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "array",
+                                        items: {
+                                            "$ref": "#/components/schemas/post"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        400: {
+                            description: "Invalid ID supplied"
+                        }
+                    }
+                },
+                post: {
+                    tags: [
+                        "Post"
+                    ],
+                    summary: "Add a new Post",
+                    description: "Add a new post from a user to the social network",
+                    operationId: "postNewPost",
+                    requestBody: {
+                        description: "New post from a logged in user",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        content: {
+                                            type: 'string', example: "New hello world"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        required: true
+                    },
+                    responses: {
+                        201: {
+                            description: "Successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        "$ref": "#/components/schemas/post"
+                                    }
+                                }
+                            }
+                        },
+                        400: {
+                            description: "Invalid ID supplied"
+                        }
+                    },
+                    security: [
+                        {
+                            jwtAuth: []
+                        }
+                    ]
+                }
+            },
+            "/api/v1/posts/{id}": {
+                get: {
+                    tags: [
+                        "Post"
+                    ],
+                    summary: "Get Post data",
+                    description: "Get Post information",
+                    operationId: "getPostById",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            description: "ID of Post",
+                            required: true,
+                            schema: {
+                                type: "string",
+                                format: "uuid"
+                            }
+                        }
+                    ],
+                    responses: {
+                        200: {
+                            description: "successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        "$ref": "#/components/schemas/post"
+                                    }
+                                }
+                            }
+                        },
+                        404: {
+                            description: "Invalid ID supplied"
+                        },
+                        400: {
+                            description: "Invalid ID supplied"
+                        }
+
+                    }
+                },
+                patch: {
+                    tags: [
+                        "Post"
+                    ],
+                    summary: "Update Post",
+                    description: "Update posts from a logged in user",
+                    operationId: "updatePost",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            description: "ID of Post",
+                            required: true,
+                            schema: {
+                                type: "string",
+                                format: "uuid"
+                            }
+                        }
+                    ],
+                    requestBody: {
+                        description: "Update Post",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        content: {
+                                            type: "string", example: "Update Hello World"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        required: true
+                    },
+                    responses: {
+                        200: {
+                            description: "Post with {id} edited successfully by the user with {userId}",
+                        },
+                        404: {
+                            description: "Invalid ID supplied"
+                        },
+                        400: {
+                            description: "Invalid ID supplied"
+                        }
+                    },
+                    security: [
+                        {
+                            jwtAuth: []
+                        }
+                    ]
+                },
+                delete: {
+                    tags: [
+                        "Post"
+                    ],
+                    summary: "Delete Post ",
+                    description: "Delete post from a logged in user",
+                    operationId: "deletePost",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            description: "ID of Post",
+                            required: true,
+                            schema: {
+                                type: "string",
+                                format: "uuid"
+                            }
+                        }
+                    ],
+                    responses: {
+                        204: {
+                            description: "",
+                        },
+                        400: {
+                            description: "Error",
+                        }
+                    },
+                    security: [
+                        {
+                            jwtAuth: []
+                        }
+                    ]
+                }
+            },
+            "/api/v1/posts/{id}/likes": {
+                get: {
+                    tags: [
+                        "Post"
+                    ],
+                    summary: "Get all Likes of Post",
+                    description: "Find the likes of a post",
+                    operationId: "getAllLikesPost",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            description: "ID of Post",
+                            required: true,
+                            schema: {
+                                type: "string",
+                                format: "uuid"
+                            }
+                        }
+                    ],
+                    responses: {
+                        200: {
+                            description: "Successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            count: {
+                                                type: 'string', example: "5"
+                                            },
+                                            schema: {
+                                                type: "array",
+                                                items: {
+                                                    "$ref": "#/components/schemas/follow"
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                        404: {
+                            description: "Invalid ID supplied"
+                        },
+                        400: {
+                            description: "Invalid ID supplied"
+                        }
+                    }
+                },
+                post: {
+                    tags: [
+                        "Post"
+                    ],
+                    summary: "Add like to a post",
+                    description: "Add like to a post the social network",
+                    operationId: "postNewLike",
+                    requestBody: {
+                        description: "Add like of a logged in user to a post",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        id: {
+                                            type: 'string', example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                                        },
+                                        userId: {
+                                            type: 'string', example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                                        },
+                                        postId: {
+                                            type: 'string', example: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                        required: true
+                    },
+                    responses: {
+                        201: {
+                            description: "Successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        "$ref": "#/components/schemas/user"
+                                    }
+                                }
+                            }
+                        },
+                        400: {
+                            description: "Invalid ID supplied"
+                        }
+                    },
+                    security: [
+                        {
+                            jwtAuth: []
+                        }
+                    ]
+                }
+            },
+            "/api/v1/follows": {
+                get: {
+                    tags: [
+                        "Follow"
+                    ],
+                    summary: "Get my follows",
+                    description: "Find my follows",
+                    operationId: "getMyFollows",
+                    responses: {
+                        "200": {
+                            description: "successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "array",
+                                        items: {
+                                            "$ref": "#/components/schemas/follow"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    security: [
+                        {
+                            jwtAuth: []
+                        }
+                    ]
+                }
+            },
+            "/api/v1/followers": {
+                get: {
+                    tags: [
+                        "Follow"
+                    ],
+                    summary: "Get my followers",
+                    description: "Find my followers",
+                    operationId: "getMyFollowers",
+                    responses: {
+                        "200": {
+                            description: "successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "array",
+                                        items: {
+                                            "$ref": "#/components/schemas/follow"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    security: [
+                        {
+                            jwtAuth: []
+                        }
+                    ]
+                }
+            },
+            "/api/v1/auth/login": {
+                post: {
+                    tags: [
+                        "Auth"
+                    ],
+                    summary: "Login",
+                    description: "Sign up",
+                    operationId: "postLogin",
+                    requestBody: {
+                        description: "After login you will receive a token",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        email: {
+                                            type: 'string',
+                                            example: "user@email.com"
+                                        },
+                                        password: {
+                                            type: "string",
+                                            example: "pass1234"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        required: true
+                    },
+                    responses: {
+                        201: {
+                            description: "Successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            message: {
+                                                type: 'string',
+                                                example: "Correct Credentials!"
+                                            },
+                                            token: {
+                                                type: "string",
+                                                example: "TOKEN"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        400: {
+                            description: "Invalid ID supplied"
+                        },
+                        401: {
+                            description: "Invalid ID supplied"
+                        }
+                    }
+                }
+            },
+            "/api/v1/auth/recovery-password": {
+                post: {
+                    tags: [
+                        "Auth"
+                    ],
+                    summary: "Recovery Password",
+                    description: "Request an account recovery",
+                    operationId: "postRecoveryToken",
+                    requestBody: {
+                        description: "You will receive an email with the password reset address",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        email: {
+                                            type: 'string',
+                                            example: "user@email.com"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        required: true
+                    },
+                    responses: {
+                        200: {
+                            description: "Successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            message: {
+                                                type: 'string',
+                                                example: "Email sended!, Check your inbox"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        400: {
+                            description: "Invalid Data"
+                        }
+                    }
+                }
+            },
+            "/api/v1/auth/recovery-password/{id}": {
+                patch: {
+                    tags: [
+                        "Auth"
+                    ],
+                    summary: "Restore Password",
+                    description: "Update a user's password",
+                    operationId: "patchPassword",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            description: "ID of Recovery-password",
+                            required: true,
+                            schema: {
+                                type: "string",
+                                format: "uuid"
+                            }
+                        }
+                    ],
+                    requestBody: {
+                        description: "update the password with the email received",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        password: {
+                                            type: 'string',
+                                            example: "newpass1234"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        required: true
+                    },
+                    responses: {
+                        200: {
+                            description: "Successful operation",
+                            content: {
+                                "application/json": {
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            message: {
+                                                type: 'string',
+                                                example: "Password updated succesfully!"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        400: {
+                            description: "URL expired"
+                        }
+                    }
+                }
             }
         }
     },
@@ -546,7 +1114,7 @@ const swaggerDocs = (app, port) => {
         res.send(swaggerSpec)
     })
     console.log(
-        `SWAGGER HOST: /api/v1/docs.json `
+        `SWAGGER HOST: /api/v1/docs `
     );
 }
 
