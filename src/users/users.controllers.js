@@ -6,7 +6,7 @@ const { hashPassword } = require('../utils/crypto')
 const findAllUsers = async () => {
     const data = await Users.findAll({
         attributes: {
-            exclude: ['password', 'createdAt', 'updatedAt']
+            exclude: ['password', 'createdAt', 'updatedAt','status','role','profileImg']
         },
         where: {
             status: 'active'

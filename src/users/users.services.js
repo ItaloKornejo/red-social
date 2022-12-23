@@ -46,9 +46,9 @@ const postUser = (req, res) => {
             await mailer.sendMail({
                 from: config.api.emailSend,
                 to: data.email,
-                subject: `Bienvenido ${data.firstName} From Harmonyk`,
-                html: `<h1>Bienvenido a nuestra app ${data.firstName}</h1> <a href="#" class="myButton">turquoise</a> `,
-                text: 'Que gusto verte por aqui',
+                subject: `Verify account ${data.firstName} From Harmonyk`,
+                html: `<h1>Enter the following link to verify your account ${data.firstName}</h1> `,
+                text: 'Thanks you',
                 
             })
             res.status(201).json(data)

@@ -8,7 +8,9 @@ const followUser = async (follower, following) => {
         id: uuid.v4(),
         userId: follower,
         userId2: following
-    })
+    },{attributes: {
+        exclude: ['createdAt', 'updatedAt']
+    }})
     return data
 }
 
